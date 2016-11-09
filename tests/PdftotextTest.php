@@ -8,7 +8,6 @@ use Ottosmops\Pdftotext\Exceptions\FileNotFound;
 use Ottosmops\Pdftotext\Exceptions\BinaryNotFound;
 
 
-
 class PdftotextTest extends \PHPUnit_Framework_TestCase
 {
     protected $dummyPdf = __DIR__.'/testfiles/dummy.pdf';
@@ -63,5 +62,4 @@ class PdftotextTest extends \PHPUnit_Framework_TestCase
             ->pdf(__DIR__.'/testfiles/corrupted_dummy.pdf')
             ->text();
     }
-
 }

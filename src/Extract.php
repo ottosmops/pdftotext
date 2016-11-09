@@ -1,14 +1,10 @@
 <?php namespace Ottosmops\Pdftotext;
 
-
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 use Ottosmops\Pdftotext\Exceptions\CouldNotExtractText;
 use Ottosmops\Pdftotext\Exceptions\FileNotFound;
 use Ottosmops\Pdftotext\Exceptions\BinaryNotFound;
-
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 
 class Extract 
@@ -72,5 +68,4 @@ class Extract
         
         return trim($process->getOutput(), " \t\n\r\0\x0B\x0C");
     }
-
 }
