@@ -16,9 +16,9 @@ class Extract
     protected $source = '';
 
     /**
-     * check the binary and setup the command
-     * @param string $executable 
-     * @param string $options    options for the commandline tool pdftotext
+     * setup executable and options
+     * @param string $executable path to executable (default is 'pdftotext')
+     * @param string $options    options for pdftotext
      */
     public function __construct($executable = null, $options = null)
     {   
@@ -39,7 +39,8 @@ class Extract
     /**
      * get text from pdf 
      * @param  string $source  
-     * @param  string $options 
+     * @param  string $options (optional)
+     * @param  string $executable (optional)
      * @return string
      */
     public static function getText($source, $options = null, $executable = null)

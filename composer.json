@@ -2,10 +2,10 @@
     "name": "ottosmops/pdftotext",
     "description": "Extract text from PDF",
     "keywords": [
+        "laravel",
         "anton",
         "ottosmops",
-        "pdftotext",
-        "laravel"
+        "pdftotext"        
     ],
     "authors": [
         {
