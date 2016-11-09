@@ -1,0 +1,40 @@
+{
+    "name": "ottosmops/pdftotext",
+    "description": "Extract text from PDF",
+    "keywords": [
+        "anton",
+        "ottosmops",
+        "pdftotext"
+    ],
+    "authors": [
+        {
+            "name": "Andreas Kraenzle",
+            "email": "kraenzle@k-r.ch",
+            "homepage": "https://wwwk-r.ch"
+        }
+    ],
+    "homepage": "https://github.com/ottosmops/pdftotext",
+    "license": "MIT",
+    "minimum-stability": "dev",
+
+    "require": {
+        "php": ">=5.6.0",
+        "symfony/process": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ottosmops\\Pdftotext\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ottosmops\\Pdftotext\\Test\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

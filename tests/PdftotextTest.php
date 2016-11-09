@@ -1,0 +1,67 @@
+<?php
+namespace Ottosmops\Pdftotext\Test;
+
+use Ottosmops\Pdftotext\Extract;
+
+use Ottosmops\Pdftotext\Exceptions\CouldNotExtractText;
+use Ottosmops\Pdftotext\Exceptions\FileNotFound;
+use Ottosmops\Pdftotext\Exceptions\BinaryNotFound;
+
+
+
+class PdftotextTest extends \PHPUnit_Framework_TestCase
+{
+    protected $dummyPdf = __DIR__.'/testfiles/dummy.pdf';
+    protected $dummyPdfText = 'This is a dummy PDF';
+
+    /** @test */
+    public function it_can_text_text_from_a_pdf()
+    {
+        $text = (new Extract())
+            ->pdf($this->dummyPdf)
+            ->text();
+        $this->assertSame($this->dummyPdfText, $text);
+       
+    }
+
+     /** @test */
+    public function it_provides_a_static_method_to_extract_text()
+    {
+        $this->assertSame($this->dummyPdfText, Extract::getText($this->dummyPdf));
+    }
+
+    /** @test */
+    public function it_will_throw_an_exception_when_the_pdf_is_not_found()
+    {
+        $this->setExpectedException(FileNotFound::class);
+        $text = (new Extract())
+                 ->pdf('/no/pdf/here/dummy.pdf')
+                 ->text();
+    }
+
+    /** @test */
+    public function it_can_hande_paths_with_spaces()
+    {
+        $pdfPath = __DIR__.'/testfiles/dummy with spaces in its name.pdf';
+        $this->assertSame($this->dummyPdfText, Extract::getText($pdfPath));
+    }
+
+    /** @test */
+    public function it_will_throw_an_exception_when_the_binary_is_not_found()
+    {
+        $this->setExpectedException(BinaryNotFound::class);
+        (new Extract('/there/is/no/place/like/home/pdftotext'))
+            ->pdf($this->dummyPdf)
+            ->text();
+    }
+
+    /** @test */
+    public function it_will_throw_an_exception_when_the_pdf_is_not_valide()
+    {
+        $this->setExpectedException(CouldNotExtractText::class);
+        (new Extract())
+            ->pdf(__DIR__.'/testfiles/corrupted_dummy.pdf')
+            ->text();
+    }
+
+}
