@@ -1,4 +1,4 @@
-# Extract text from a file with pdftotext
+# Extract text from a PDF with pdftotext
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
@@ -36,7 +36,7 @@ Default options are: ```-eol unix -enc UTF-8 -raw```
 
 ## Postcard
 
-You're free to use this package (it's [MIT-licensed](LICENSE.md)). However, feel free to send us a postcard:
+You're free to use this package (it's [MIT-licensed](LICENSE.md)). However, feel free to send us a postcard.
 
 Our address is: Kraenzle & Ritter, Sihlfeldstrasse 89, 8004 Zuerich, Switzerland
 
