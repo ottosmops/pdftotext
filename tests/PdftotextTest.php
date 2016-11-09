@@ -11,10 +11,11 @@ use Ottosmops\Pdftotext\Exceptions\BinaryNotFound;
 class PdftotextTest extends \PHPUnit_Framework_TestCase
 {
     protected $dummyPdf = __DIR__.'/testfiles/dummy.pdf';
+    protected $dummyPdfutf = __DIR__.'/testfiles/dummy-utf8.pdf';
     protected $dummyPdfText = 'This is a dummy PDF';
 
     /** @test */
-    public function it_can_text_text_from_a_pdf()
+    public function it_can_extract_text_from_a_pdf()
     {
         $text = (new Extract())
             ->pdf($this->dummyPdf)
@@ -27,6 +28,18 @@ class PdftotextTest extends \PHPUnit_Framework_TestCase
     public function it_provides_a_static_method_to_extract_text()
     {
         $this->assertSame($this->dummyPdfText, Extract::getText($this->dummyPdf));
+    }
+
+     /** @test */
+    public function it_provides_a_static_method_to_extract_text_with_options()
+    {
+        $this->assertSame("eAoiU", Extract::getText($this->dummyPdfutf, '-raw -enc ASCII7'));
+    }
+
+    /** @test */
+    public function it_provides_utf8()
+    {
+        $this->assertSame("èÄöiÜ", Extract::getText($this->dummyPdfutf));
     }
 
     /** @test */

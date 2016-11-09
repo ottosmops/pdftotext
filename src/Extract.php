@@ -20,17 +20,20 @@ class Extract
      * @param string $executable 
      * @param string $options    options for the commandline tool pdftotext
      */
-    public function __construct($executable = 'pdftotext', $options = ' -eol unix -enc UTF-8 -raw')
+    public function __construct($executable = null, $options = null)
     {   
-        $process = new Process('which '. $executable);
-        $process->run();
+        $executable = (isset($executable) && $executable != "") ? $executable : 'pdftotext';
 
+        $process = new Process('which ' . $executable);
+        $process->run();
         if (!$process->isSuccessful()) {
             throw new BinaryNotFound($process);
         }
+        $executable = $process->getOutput();
+        
 
-        $this->executable = trim($process->getOutput());
-        $this->options = $options;
+        $this->executable = trim($executable);
+        $this->options = (isset($options) && $options != '') ? $options: '-eol unix -enc UTF-8 -raw';
     }
 
     /**
@@ -39,11 +42,10 @@ class Extract
      * @param  string $options 
      * @return string
      */
-    public static function getText($source, $options = '')
+    public static function getText($source, $options = null, $executable = null)
     {
-        return (new static())
+        return (new static($executable, $options))
                   ->pdf($source)
-                  ->options($options)
                   ->text();
     }
 
@@ -79,8 +81,7 @@ class Extract
      * @return string 
      */
     public function text()
-    {   
-        
+    {       
         $command = "{$this->executable} {$this->options} '{$this->source}' -";
         
         $process = new Process($command);
