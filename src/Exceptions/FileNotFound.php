@@ -2,4 +2,5 @@
 
 class FileNotFound extends \Exception
 {
+    
 }

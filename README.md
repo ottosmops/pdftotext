@@ -2,6 +2,7 @@
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
+
 This package provides a class to extract text from a pdf. It is more or less a PHP 5.6 compatible copy of [spatie/pdf-to-text](https://github.com/spatie/pdf-to-text). 
 
 ```php
