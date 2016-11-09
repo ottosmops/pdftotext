@@ -9,11 +9,11 @@ use Ottosmops\Pdftotext\Exceptions\BinaryNotFound;
 
 class Extract 
 {
-    protected $executable;
+    protected $executable = '';
 
-    protected $options;
+    protected $options = '';
 
-    protected $source;
+    protected $source = '';
 
 
     public function __construct($executable = 'pdftotext', $options = ' -eol unix -enc UTF-8 -raw')
@@ -37,7 +37,7 @@ class Extract
                   ->text();
     }
 
-    public function options($options)
+    public function options($options = '')
     {
         $this->options = $options;
         
