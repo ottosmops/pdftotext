@@ -15,7 +15,11 @@ class Extract
 
     protected $source = '';
 
-
+    /**
+     * check the binary and setup the command
+     * @param string $executable 
+     * @param string $options    options for the commandline tool pdftotext
+     */
     public function __construct($executable = 'pdftotext', $options = ' -eol unix -enc UTF-8 -raw')
     {   
         $process = new Process('which '. $executable);
@@ -29,6 +33,12 @@ class Extract
         $this->options = $options;
     }
 
+    /**
+     * get text from pdf 
+     * @param  string $source  
+     * @param  string $options 
+     * @return string
+     */
     public static function getText($source, $options = '')
     {
         return (new static())
@@ -37,6 +47,11 @@ class Extract
                   ->text();
     }
 
+    /**
+     * set options
+     * @param  string $options 
+     * @return object          
+     */
     public function options($options = '')
     {
         $this->options = $options;
@@ -44,6 +59,11 @@ class Extract
         return $this;
     }
 
+    /**
+     * set pdf files (source)
+     * @param  string $source
+     * @return object    
+     */
     public function pdf($source)
     {
         if (!file_exists($source)) {
@@ -54,6 +74,10 @@ class Extract
         return $this;
     }
 
+    /**
+     * extract text 
+     * @return string 
+     */
     public function text()
     {   
         
