@@ -29,7 +29,7 @@ class Extract
         $this->options = $options;
     }
 
-    public static function getText($source, $options = null)
+    public static function getText($source, $options = '')
     {
         return (new static())
                   ->pdf($source)
