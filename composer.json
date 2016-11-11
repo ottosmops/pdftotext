@@ -9,15 +9,13 @@
     ],
     "authors": [
         {
-            "name": "Andreas Kraenzle",
+            "name": "ak",
             "email": "kraenzle@k-r.ch",
             "homepage": "https://wwwk-r.ch"
         }
     ],
     "homepage": "https://github.com/ottosmops/pdftotext",
     "license": "MIT",
-    "minimum-stability": "stable",
-
     "require": {
         "php": ">=5.6.0",
         "symfony/process": "^3.0"

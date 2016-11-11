@@ -26,11 +26,11 @@ class Extract
 
         $process = new Process('which ' . $executable);
         $process->run();
+        
         if (!$process->isSuccessful()) {
             throw new BinaryNotFound($process);
         }
         $executable = $process->getOutput();
-        
 
         $this->executable = trim($executable);
         $this->options = (isset($options) && $options != '') ? $options: '-eol unix -enc UTF-8 -raw';

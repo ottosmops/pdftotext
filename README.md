@@ -19,6 +19,15 @@ The Package uses [pdftotext](https://en.wikipedia.org/wiki/Pdftotext). Make sure
 For Installation see:
 [poppler-utils](https://linuxappfinder.com/package/poppler-utils)
 
+If the installed binary is not found ("```The command "which pdftotext" failed.```") you can pass the full path to the ```_constructor``` (see below) or use ```putenv('PATH=$PATH:/usr/local/bin/:/usr/bin')``` (with the dir where pdftotext lives) before you call the class ```Convert```.
+
+
+## Installation
+
+```bash
+composer require ottosmops/pdftotext
+```
+
 ## Usage
 
 Extracting text from a pdf:
