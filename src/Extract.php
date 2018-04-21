@@ -7,7 +7,7 @@ use Ottosmops\Pdftotext\Exceptions\FileNotFound;
 use Ottosmops\Pdftotext\Exceptions\BinaryNotFound;
 
 
-class Extract 
+class Extract
 {
     protected $executable = '';
 
@@ -21,14 +21,20 @@ class Extract
      * @param string $options    options for pdftotext
      */
     public function __construct($executable = null, $options = null)
-    {   
+    {
         $executable = (isset($executable) && $executable != "") ? $executable : 'pdftotext';
 
         $process = new Process('which ' . $executable);
         $process->run();
-        
+
         if (!$process->isSuccessful()) {
-            throw new BinaryNotFound($process);
+            // use type if which doesn't work
+            $process = new Process('type -P ' . $executable);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new BinaryNotFound($process);
+            }
         }
         $executable = $process->getOutput();
 
@@ -36,9 +42,10 @@ class Extract
         $this->options = (isset($options) && $options != '') ? $options: '-eol unix -enc UTF-8 -raw';
     }
 
+
     /**
-     * get text from pdf 
-     * @param  string $source  
+     * get text from pdf
+     * @param  string $source
      * @param  string $options (optional)
      * @param  string $executable (optional)
      * @return string
@@ -52,20 +59,20 @@ class Extract
 
     /**
      * set options
-     * @param  string $options 
-     * @return object          
+     * @param  string $options
+     * @return object
      */
     public function options($options = '')
     {
         $this->options = $options;
-        
+
         return $this;
     }
 
     /**
      * set pdf files (source)
      * @param  string $source
-     * @return object    
+     * @return object
      */
     public function pdf($source)
     {
@@ -73,25 +80,25 @@ class Extract
             throw new FileNotFound("could not find pdf {$source}");
         }
         $this->source = $source;
-        
+
         return $this;
     }
 
     /**
-     * extract text 
-     * @return string 
+     * extract text
+     * @return string
      */
     public function text()
-    {       
+    {
         $command = "{$this->executable} {$this->options} '{$this->source}' -";
-        
+
         $process = new Process($command);
         $process->run();
 
         if (!$process->isSuccessful()) {
             throw new CouldNotExtractText($process);
         }
-        
+
         return trim($process->getOutput(), " \t\n\r\0\x0B\x0C");
     }
 }
