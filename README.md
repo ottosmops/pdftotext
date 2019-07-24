@@ -6,7 +6,9 @@
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/6473aa57-9e90-448d-beb8-626e7f152f45/mini.png)](https://insight.sensiolabs.com/projects/6473aa57-9e90-448d-beb8-626e7f152f45)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/ottosmops/pdftotext.svg?style=flat-square)](https://packagist.org/packages/ottosmops/pdftotext)
 
-This package provides a class to extract text from a pdf. It is more or less a PHP 5.6 compatible copy of [spatie/pdf-to-text](https://github.com/spatie/pdf-to-text). 
+This package provides a class to extract text from a pdf. 
+
+**For PHP 5.6 use Version 1.0.3** 
 
 ```php
   \Ottosmops\Pdftotext\Extract::getText('/path/to/file.pdf') //returns the text from the pdf
