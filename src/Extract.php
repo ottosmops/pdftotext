@@ -24,12 +24,12 @@ class Extract
     {
         $executable = (isset($executable) && $executable != "") ? $executable : 'pdftotext';
 
-        $process = new Process('which ' . $executable);
+        $process = Process::fromShellCommandline('which ' . $executable);
         $process->run();
 
         if (!$process->isSuccessful()) {
             // use type if which doesn't work
-            $process = new Process('type -P ' . $executable);
+            $process = Process::fromShellCommandline('type -P ' . $executable);
             $process->run();
 
             if (!$process->isSuccessful()) {
@@ -92,7 +92,7 @@ class Extract
     {
         $command = "{$this->executable} {$this->options} '{$this->source}' -";
 
-        $process = new Process($command);
+        $process = Process::fromShellCommandline($command);
         $process->run();
 
         if (!$process->isSuccessful()) {
