@@ -6,9 +6,9 @@ use Ottosmops\Pdftotext\Extract;
 use Ottosmops\Pdftotext\Exceptions\CouldNotExtractText;
 use Ottosmops\Pdftotext\Exceptions\FileNotFound;
 use Ottosmops\Pdftotext\Exceptions\BinaryNotFound;
+use PHPUnit\Framework\TestCase;
 
-
-class PdftotextTest extends \PHPUnit_Framework_TestCase
+class PdftotextTest extends TestCase
 {
     protected $dummyPdf = __DIR__.'/testfiles/dummy.pdf';
     protected $dummyPdfutf = __DIR__.'/testfiles/dummy-utf8.pdf';
@@ -21,7 +21,6 @@ class PdftotextTest extends \PHPUnit_Framework_TestCase
             ->pdf($this->dummyPdf)
             ->text();
         $this->assertSame($this->dummyPdfText, $text);
-       
     }
 
      /** @test */
@@ -45,7 +44,7 @@ class PdftotextTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_will_throw_an_exception_when_the_pdf_is_not_found()
     {
-        $this->setExpectedException(FileNotFound::class);
+        $this->expectException(FileNotFound::class);
         $text = (new Extract())
                  ->pdf('/no/pdf/here/dummy.pdf')
                  ->text();
@@ -61,7 +60,7 @@ class PdftotextTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_will_throw_an_exception_when_the_binary_is_not_found()
     {
-        $this->setExpectedException(BinaryNotFound::class);
+        $this->expectException(BinaryNotFound::class);
         (new Extract('/there/is/no/place/like/home/pdftotext'))
             ->pdf($this->dummyPdf)
             ->text();
@@ -70,7 +69,7 @@ class PdftotextTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_will_throw_an_exception_when_the_pdf_is_not_valide()
     {
-        $this->setExpectedException(CouldNotExtractText::class);
+        $this->expectException(CouldNotExtractText::class);
         (new Extract())
             ->pdf(__DIR__.'/testfiles/corrupted_dummy.pdf')
             ->text();
