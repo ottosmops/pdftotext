@@ -3,7 +3,6 @@
 [![Software License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE.md)
 [![Latest Stable Version](https://poser.pugx.org/ottosmops/pdftotext/v/stable?format=flat-square)](https://packagist.org/packages/ottosmops/pdftotext)
 [![Build Status](https://img.shields.io/travis/ottosmops/pdftotext/master.svg?style=flat-square)](https://travis-ci.org/ottomops/pdftotext)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/6473aa57-9e90-448d-beb8-626e7f152f45/mini.png)](https://insight.sensiolabs.com/projects/6473aa57-9e90-448d-beb8-626e7f152f45)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/ottosmops/pdftotext.svg?style=flat-square)](https://packagist.org/packages/ottosmops/pdftotext)
 
 This package provides a class to extract text from a pdf. 
