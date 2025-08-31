@@ -7,18 +7,28 @@ use Ottosmops\Pdftotext\Exceptions\FileNotFound;
 use Ottosmops\Pdftotext\Exceptions\BinaryNotFound;
 
 
+
 class Extract
 {
+    /**
+     * @var string Pfad zur pdftotext-Binary
+     */
     protected $executable = '';
 
+    /**
+     * @var string Optionen für pdftotext
+     */
     protected $options = '';
 
+    /**
+     * @var string Pfad zur PDF-Datei
+     */
     protected $source = '';
 
     /**
-     * setup executable and options
-     * @param string $executable path to executable (default is 'pdftotext')
-     * @param string $options    options for pdftotext
+     * Setup executable and options
+     * @param string|null $executable path to executable (default is 'pdftotext')
+     * @param string|null $options    options for pdftotext
      */
     public function __construct($executable = null, $options = null)
     {
@@ -33,7 +43,7 @@ class Extract
             $process->run();
 
             if (!$process->isSuccessful()) {
-                throw new BinaryNotFound($process);
+                throw new BinaryNotFound("pdftotext binary not found. Command: 'which/type -P $executable'. Output: " . $process->getErrorOutput());
             }
         }
         $executable = $process->getOutput();
@@ -43,11 +53,12 @@ class Extract
     }
 
 
+
     /**
-     * get text from pdf
+     * Get text from pdf
      * @param  string $source
-     * @param  string $options (optional)
-     * @param  string $executable (optional)
+     * @param  string|null $options (optional)
+     * @param  string|null $executable (optional)
      * @return string
      */
     public static function getText($source, $options = null, $executable = null)
@@ -57,36 +68,39 @@ class Extract
                   ->text();
     }
 
+
     /**
-     * set options
+     * Set options
      * @param  string $options
-     * @return object
+     * @return $this
      */
     public function options($options = '')
     {
         $this->options = $options;
-
         return $this;
     }
 
+
     /**
-     * set pdf files (source)
+     * Set pdf file (source)
      * @param  string $source
-     * @return object
+     * @return $this
+     * @throws FileNotFound
      */
     public function pdf($source)
     {
         if (!file_exists($source)) {
-            throw new FileNotFound("could not find pdf {$source}");
+            throw new FileNotFound("Could not find PDF file: {$source}");
         }
         $this->source = $source;
-
         return $this;
     }
 
+
     /**
-     * extract text
+     * Extract text
      * @return string
+     * @throws CouldNotExtractText
      */
     public function text()
     {
@@ -96,7 +110,7 @@ class Extract
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new CouldNotExtractText($process);
+            throw new CouldNotExtractText("Could not extract text from PDF. Command: $command. Error: " . $process->getErrorOutput());
         }
 
         return trim($process->getOutput(), " \t\n\r\0\x0B\x0C");
