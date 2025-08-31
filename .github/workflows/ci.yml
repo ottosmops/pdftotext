@@ -16,6 +16,8 @@ jobs:
         with:
           php-version: '8.3'
           coverage: xdebug
+      - name: Install pdftotext (poppler-utils)
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
       - name: Run tests
