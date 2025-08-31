@@ -43,7 +43,7 @@ class Extract
             $process->run();
 
             if (!$process->isSuccessful()) {
-                throw new BinaryNotFound("pdftotext binary not found. Command: 'which/type -P $executable'. Output: " . $process->getErrorOutput());
+                throw new BinaryNotFound($process);
             }
         }
         $executable = $process->getOutput();
@@ -110,7 +110,7 @@ class Extract
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new CouldNotExtractText("Could not extract text from PDF. Command: $command. Error: " . $process->getErrorOutput());
+            throw new CouldNotExtractText($process);
         }
 
         return trim($process->getOutput(), " \t\n\r\0\x0B\x0C");

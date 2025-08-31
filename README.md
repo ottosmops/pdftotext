@@ -2,7 +2,6 @@
 # Extract text from a PDF with pdftotext
 
 [![codecov](https://codecov.io/gh/ottosmops/pdftotext/branch/master/graph/badge.svg)](https://codecov.io/gh/ottosmops/pdftotext)
-
 [![Software License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE.md)
 [![Latest Stable Version](https://poser.pugx.org/ottosmops/pdftotext/v/stable?format=flat-square)](https://packagist.org/packages/ottosmops/pdftotext)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/ottosmops/pdftotext.svg?style=flat-square)](https://packagist.org/packages/ottosmops/pdftotext)
@@ -63,4 +62,3 @@ Default options are: ```-eol unix -enc UTF-8 -raw```
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
