@@ -1,6 +1,14 @@
+
 # Changelog
 
-All Notable changes to `pdftotext` will be documented in this file
+All notable changes to `pdftotext` will be documented in this file.
+
+## 2.0.1 – 2025-08-31
+- Remove PHP 5.6 reference from docs
+- Add GitHub Actions workflow for CI and code coverage
+- Add codecov badge to README
+- Improve documentation and security notes
+- Minor Markdown and PHPDoc improvements
 
 ## 2.0.0 – 2019-07-24
 Version for php >= 7.1 (symfony process >= 4.2)
