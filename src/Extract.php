@@ -2,10 +2,9 @@
 
 use Symfony\Component\Process\Process;
 
-use Ottosmops\Pdftotext\Exceptions\CouldNotExtractText;
 use Ottosmops\Pdftotext\Exceptions\FileNotFound;
 use Ottosmops\Pdftotext\Exceptions\BinaryNotFound;
-
+use Ottosmops\Pdftotext\Exceptions\CouldNotExtractText;
 
 
 class Extract
