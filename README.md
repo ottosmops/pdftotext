@@ -20,7 +20,7 @@ This package provides a class to extract text from a pdf.
 The Package uses [pdftotext](https://en.wikipedia.org/wiki/Pdftotext). Make sure that this is installed: ```which pdftotext```
 
 For Installation see:
-[poppler-utils](https://linuxappfinder.com/package/poppler-utils)
+[poppler-utils](https://poppler.freedesktop.org/)
 
 If the installed binary is not found ("```The command "which pdftotext" failed.```") you can pass the full path to the ```_constructor``` (see below) or use ```putenv('PATH=$PATH:/usr/local/bin/:/usr/bin')``` (with the dir where pdftotext lives) before you call the class ```Extract```.
 
