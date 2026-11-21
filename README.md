@@ -1,32 +1,27 @@
-
 # Extract text from a PDF with pdftotext
 
-[![codecov](https://codecov.io/gh/ottosmops/pdftotext/branch/master/graph/badge.svg)](https://codecov.io/gh/ottosmops/pdftotext)
+[![Tests](https://github.com/ottosmops/pdftotext/actions/workflows/tests.yml/badge.svg)](https://github.com/ottosmops/pdftotext/actions/workflows/tests.yml)
 [![Software License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE.md)
 [![Latest Stable Version](https://poser.pugx.org/ottosmops/pdftotext/v/stable?format=flat-square)](https://packagist.org/packages/ottosmops/pdftotext)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/ottosmops/pdftotext.svg?style=flat-square)](https://packagist.org/packages/ottosmops/pdftotext)
 
-
-This package provides a class to extract text from a pdf.
-
-
+This package provides a class to extract the text layer of a PDF with [pdftotext](https://en.wikipedia.org/wiki/Pdftotext).
 
 ```php
-\Ottosmops\Pdftotext\Extract::getText('/path/to/file.pdf') //returns the text from the pdf
+\Ottosmops\Pdftotext\Extract::getText('/path/to/file.pdf'); // returns the text from the pdf
 ```
+
+pdftotext is started with a list of arguments, not through a shell: file names and option values are passed on as they are, whatever characters they contain.
 
 ## Requirements
 
-The Package uses [pdftotext](https://en.wikipedia.org/wiki/Pdftotext). Make sure that this is installed: ```which pdftotext```
+- PHP >= 8.1
+- symfony/process 5.4, 6.4, 7.x or 8.x
+- [poppler-utils](https://poppler.freedesktop.org/), which provides `pdftotext` (`apt install poppler-utils`, `brew install poppler`)
 
-For Installation see:
-[poppler-utils](https://poppler.freedesktop.org/)
-
-If the installed binary is not found ("```The command "which pdftotext" failed.```") you can pass the full path to the ```_constructor``` (see below) or use ```putenv('PATH=$PATH:/usr/local/bin/:/usr/bin')``` (with the dir where pdftotext lives) before you call the class ```Extract```.
-
+The executable is looked up in `PATH` and then in `/usr/local/bin`, `/opt/homebrew/bin`, `/opt/local/bin`, `/usr/bin` and `/bin`. If it lives elsewhere, pass the full path to the constructor (see below).
 
 ## Installation
-
 
 ```bash
 composer require ottosmops/pdftotext
@@ -37,27 +32,110 @@ composer require ottosmops/pdftotext
 Extracting text from a pdf:
 
 ```php
+use Ottosmops\Pdftotext\Extract;
+
 $text = (new Extract())
-  ->pdf('file.pdf')
-  ->text();
+    ->pdf('file.pdf')
+    ->text();
 ```
 
+Default options are `-eol unix -enc UTF-8 -raw`. Leading and trailing whitespace, including the form feed after the last page, is trimmed.
 
+### Executable and options
 
-**Security note:**
-If you pass user input as options or filenames to the library, make sure to validate or escape them to avoid shell injection. The library uses symfony/process, which provides basic protection, but unsafe options could still cause issues.
-
-
-You can set the binary and you can specify options:
+You can set the executable and replace the options, as an array with one argument per entry:
 
 ```php
-$text = (new Extract('/path/to/pdftotext'))
-  ->pdf('path/to/file.pdf')
-  ->options('-layout')
-  ->text();
+$text = (new Extract('/path/to/pdftotext', ['-layout', '-enc', 'UTF-8']))
+    ->pdf('path/to/file.pdf')
+    ->text();
 ```
 
-Default options are: ```-eol unix -enc UTF-8 -raw```
+Option strings, as used in 2.0, still work. They are split into arguments like a shell would split them (quotes and backslashes are honoured), but no shell runs them:
+
+```php
+$text = (new Extract())
+    ->pdf('path/to/file.pdf')
+    ->options('-layout -enc UTF-8')
+    ->text();
+
+Extract::getText('path/to/file.pdf', '-raw -enc ASCII7');
+```
+
+`options()` replaces all options; `options('')` removes them. `addOptions('-nopgbrk')` appends to the current ones.
+
+### Fluent settings
+
+```php
+$text = (new Extract())
+    ->layout()              // -layout instead of -raw; raw() switches back
+    ->encoding('UTF-8')     // -enc
+    ->eol('unix')           // -eol: unix, dos or mac
+    ->pages(2, 5)           // -f 2 -l 5; pages(2) up to the end, page(3) a single page
+    ->password('secret')    // -upw, user password of an encrypted PDF; ownerPassword() for -opw
+    ->timeout(300)          // seconds; null for no limit
+    ->sanitizeUtf8()        // replace invalid UTF-8 with U+FFFD
+    ->pdf('path/to/file.pdf')
+    ->text();
+```
+
+Each setter replaces an earlier value of the same option. `command()` returns the command that will be run, as a list of arguments.
+
+The timeout defaults to 60 seconds, as in 2.0.
+
+A password is passed to pdftotext as an argument, so other users on the same machine can see it in the process list while pdftotext runs. It is never part of an exception message.
+
+### Exceptions
+
+All exceptions implement `Ottosmops\Pdftotext\Exceptions\PdftotextException`.
+
+| Exception | When |
+|---|---|
+| `BinaryNotFound` | the executable was not found or is not executable (thrown by the constructor) |
+| `FileNotFound` | the PDF does not exist or is not a file |
+| `CouldNotExtractText` | pdftotext failed; the message names the file, the exit code and the last lines of stderr, `getErrorTail()` returns those lines and `getProcess()` the process |
+| `ProcessTimedOut` | pdftotext ran longer than the timeout and was stopped |
+| `InvalidOption` | an invalid setting, e.g. page 0 or an unterminated quote in an option string |
+
+`BinaryNotFound` and `CouldNotExtractText` extend Symfony's `ProcessFailedException`, `ProcessTimedOut` extends `ProcessTimedOutException`, so code that catches those keeps working.
+
+```php
+use Ottosmops\Pdftotext\Exceptions\PdftotextException;
+
+try {
+    $text = (new Extract())->timeout(300)->pdf($file)->text();
+} catch (PdftotextException $e) {
+    report($e->getMessage());
+}
+```
+
+A message for a broken PDF looks like this:
+
+```text
+pdftotext could not extract text from "/path/to/file.pdf" (exit code 1: error opening the PDF file):
+Syntax Error: Couldn't find trailer dictionary
+Syntax Error: Couldn't read xref table
+```
+
+## Upgrading from 2.0
+
+2.1 keeps the 2.0 API. What changed:
+
+- PHP 8.1 and symfony/process 5.4 are the minimum. Composer keeps older installations on 2.0.1.
+- Option strings are split into arguments instead of being handed to a shell. Shell syntax in options (pipes, redirections, variables) no longer has any effect.
+- The executable is resolved when the object is created, without running `which`.
+- `pdf()` throws `FileNotFound` for a directory as well.
+- A timeout throws `ProcessTimedOut` (a `ProcessTimedOutException`) with a short message.
+- Exception messages no longer contain the command line and the full output.
+- The protected property `$options` holds an array instead of a string.
+
+## Testing
+
+```bash
+composer test
+```
+
+The tests need pdftotext.
 
 ## License
 
