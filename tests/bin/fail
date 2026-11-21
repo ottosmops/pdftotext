@@ -1,0 +1,8 @@
+#!/bin/sh
+# Stands in for pdftotext: writes 50 lines to stderr and fails like a permission error.
+i=1
+while [ "$i" -le 50 ]; do
+    printf 'Syntax Error: line %s\n' "$i" >&2
+    i=$((i + 1))
+done
+exit 3

@@ -1,0 +1,3 @@
+#!/bin/sh
+# Stands in for pdftotext: never finishes in time.
+exec sleep 30

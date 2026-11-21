@@ -1,0 +1,3 @@
+#!/bin/sh
+# Stands in for pdftotext: prints text containing a byte that is not valid UTF-8.
+printf 'caf\303\251 \377 ok\n'
