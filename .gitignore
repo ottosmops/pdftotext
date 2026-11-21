@@ -1,6 +1,12 @@
 build/
 composer.lock
+*.cache
+.phpunit.cache/
 docs
 vendor/
 .idea/
-.phpunit.result.cache
+coverage.xml
+
+# Claude Code
+.claude/
+CLAUDE.md
