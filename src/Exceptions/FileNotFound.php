@@ -1,6 +1,9 @@
-<?php namespace Ottosmops\Pdftotext\Exceptions;
+<?php
 
-class FileNotFound extends \Exception
+declare(strict_types=1);
+
+namespace Ottosmops\Pdftotext\Exceptions;
+
+class FileNotFound extends \Exception implements PdftotextException
 {
-    
 }
