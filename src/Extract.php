@@ -72,6 +72,10 @@ class Extract
 
     protected bool $sanitizeUtf8 = false;
 
+    protected bool $expandLigatures = false;
+
+    protected bool $joinHyphenation = false;
+
     /**
      * @param  string|null  $executable  name or path of pdftotext (default: 'pdftotext', looked up in PATH)
      * @param  string|list<string>|null  $options  options for pdftotext (default: DEFAULT_OPTIONS)
@@ -307,6 +311,34 @@ class Extract
     }
 
     /**
+     * Replace typographic ligatures (ﬁ, ﬂ, ﬀ, ﬃ, ﬄ, ﬅ, ﬆ) with their letters.
+     *
+     * @see TextCleaner::expandLigatures()
+     *
+     * @return $this
+     */
+    public function expandLigatures(bool $expand = true): static
+    {
+        $this->expandLigatures = $expand;
+
+        return $this;
+    }
+
+    /**
+     * Join words hyphenated at the end of a line: «Familien-↵anlass» → «Familienanlass».
+     *
+     * @see TextCleaner::joinHyphenation()
+     *
+     * @return $this
+     */
+    public function joinHyphenation(bool $join = true): static
+    {
+        $this->joinHyphenation = $join;
+
+        return $this;
+    }
+
+    /**
      * Set pdf file (source).
      *
      * @param  string  $source
@@ -367,7 +399,17 @@ class Extract
 
         $text = trim($process->getOutput(), " \t\n\r\0\x0B\x0C");
 
-        return $this->sanitizeUtf8 ? static::scrubUtf8($text) : $text;
+        if ($this->sanitizeUtf8) {
+            $text = static::scrubUtf8($text);
+        }
+        if ($this->expandLigatures) {
+            $text = TextCleaner::expandLigatures($text);
+        }
+        if ($this->joinHyphenation) {
+            $text = TextCleaner::joinHyphenation($text);
+        }
+
+        return $text;
     }
 
     /**
