@@ -13,6 +13,16 @@ This package provides a class to extract the text layer of a PDF with [pdftotext
 
 pdftotext is started with a list of arguments, not through a shell: file names and option values are passed on as they are, whatever characters they contain.
 
+## Security
+
+Versions up to and including 2.0.1 put the file name into a shell command in single quotes. A file name containing `'` broke the command and allowed command injection. Upgrade to 2.1.0 or later:
+
+```bash
+composer require ottosmops/pdftotext:^2.2
+```
+
+2.1 keeps the 2.0 API (see [Upgrading from 2.0](#upgrading-from-20)).
+
 ## Requirements
 
 - PHP >= 8.1
@@ -158,6 +168,10 @@ Syntax Error: Couldn't read xref table
 - A timeout throws `ProcessTimedOut` (a `ProcessTimedOutException`) with a short message.
 - Exception messages no longer contain the command line and the full output.
 - The protected property `$options` holds an array instead of a string.
+
+## Changelog
+
+What changed in each version is in [CHANGELOG.md](CHANGELOG.md) and on the [releases page](https://github.com/ottosmops/pdftotext/releases).
 
 ## Testing
 
