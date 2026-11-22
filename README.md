@@ -75,6 +75,8 @@ $text = (new Extract())
     ->password('secret')    // -upw, user password of an encrypted PDF; ownerPassword() for -opw
     ->timeout(300)          // seconds; null for no limit
     ->sanitizeUtf8()        // replace invalid UTF-8 with U+FFFD
+    ->expandLigatures()     // ﬁ → fi, ﬃ → ffi …
+    ->joinHyphenation()     // Familien-↵anlass → Familienanlass
     ->pdf('path/to/file.pdf')
     ->text();
 ```
@@ -84,6 +86,34 @@ Each setter replaces an earlier value of the same option. `command()` returns th
 The timeout defaults to 60 seconds, as in 2.0.
 
 A password is passed to pdftotext as an argument, so other users on the same machine can see it in the process list while pdftotext runs. It is never part of an exception message.
+
+### Cleaning the text for search
+
+Two clean-ups help a full-text search find words; both are off by default.
+
+`expandLigatures()` replaces the typographic ligatures U+FB00–U+FB06 with their letters. pdftotext passes them on as the PDF maps them, and a search for «offiziell» does not find «oﬃziell». Æ, Œ and Ĳ are letters of their own and stay.
+
+`joinHyphenation()` joins the words a typesetter split at the end of a line:
+
+| Text | Result |
+|---|---|
+| `Familien-↵anlass` | `Familienanlass` (a lower-case letter next: one word) |
+| `Dreikönig-↵Sternmarsch` | `Dreikönig-Sternmarsch` (an upper-case letter next: the hyphen stays) |
+| `1914-↵1918` | unchanged (digits) |
+| `Ende-↵↵Neuer Absatz` | unchanged (blank line or page break in between) |
+| `Musik\u{00AD}schule` | `Musikschule` (soft hyphens are removed everywhere) |
+
+Besides the plain hyphen it knows the Unicode hyphen (U+2010), the Fraktur double hyphen «⸗» (U+2E17) Tesseract sets and the «¬» of other OCR programs. A pair like «Schiff-↵fahrt» stays ambiguous; joined it is still the better mistake for a search. The rule fits German best; check it before using it for other languages.
+
+Both work on any UTF-8 text, also on OCR output or text from other converters:
+
+```php
+use Ottosmops\Pdftotext\TextCleaner;
+
+$text = TextCleaner::joinHyphenation(TextCleaner::expandLigatures($ocrText));
+```
+
+Text that is not valid UTF-8 is returned unchanged; combine them with `sanitizeUtf8()`. `text()` applies them in the order UTF-8 repair, ligatures, hyphenation.
 
 ### Exceptions
 

@@ -2,6 +2,14 @@
 
 All notable changes to `pdftotext` will be documented in this file.
 
+## 2.2.0 - 2026-11-22
+
+### Added
+
+- `TextCleaner::joinHyphenation()` and `Extract::joinHyphenation()`: join words hyphenated at the end of a line («Familien-↵anlass» → «Familienanlass»; before an upper-case letter the hyphen stays, digits, blank lines and page breaks are left alone) and remove soft hyphens. Knows the plain and the Unicode hyphen, the Fraktur double hyphen «⸗» and «¬».
+- `TextCleaner::expandLigatures()` and `Extract::expandLigatures()`: replace the ligatures U+FB00–U+FB06 (ﬀ ﬁ ﬂ ﬃ ﬄ ﬅ ﬆ) with their letters.
+- Both are off by default; the output of `text()` does not change unless they are switched on.
+
 ## 2.1.0 - 2026-11-21
 
 ### Security
